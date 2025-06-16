@@ -1,7 +1,56 @@
 'use strict';
 
-// Uncomment the next lines to use your game instance in the browser
-// const Game = require('../modules/Game.class');
-// const game = new Game();
+const Game = require('../modules/Game.class');
+const game = new Game();
 
-// Write your code here
+window.game = game;
+rerenderGrid();
+
+const startButton = document.querySelector('.start');
+
+startButton.addEventListener('click', () => {
+  const isRestart = game.button.innerHTML === 'Restart';
+
+  if (isRestart) {
+    game.restart();
+    rerenderGrid();
+  } else {
+    game.start();
+  }
+});
+
+document.addEventListener('keydown', ({ key }) => {
+  if (key === 'ArrowLeft') {
+    game.moveLeft();
+  }
+
+  if (key === 'ArrowRight') {
+    game.moveRight();
+  }
+
+  if (key === 'ArrowUp') {
+    game.moveUp();
+  }
+
+  if (key === 'ArrowDown') {
+    game.moveDown();
+  }
+
+  document.querySelector('.game-score').innerText = game.getScore();
+  rerenderGrid();
+});
+
+function rerenderGrid() {
+  game.getState().forEach((row, index) => {
+    row.forEach((value, innerIndex) => {
+      // eslint-disable-next-line max-len
+      const element =
+        document.querySelectorAll('.field-row')[index].children[innerIndex];
+
+      element.innerText = value;
+
+      element.className = '';
+      element.classList.add('field-cell', `field-cell--${value}`);
+    });
+  });
+}
