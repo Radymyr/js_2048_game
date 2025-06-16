@@ -1,5 +1,4 @@
 'use strict';
-// disable-eslint/
 
 /**
  * This class represents the game.
