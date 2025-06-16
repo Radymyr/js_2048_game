@@ -36,7 +36,11 @@ document.addEventListener('keydown', ({ key }) => {
     game.moveDown();
   }
 
-  document.querySelector('.game-score').innerText = game.getScore();
+  const scoreElement = document.querySelector('.game-score');
+
+  if (scoreElement) {
+    scoreElement.innerText = game.getScore();
+  }
   rerenderGrid();
 });
 
@@ -47,8 +51,11 @@ function rerenderGrid() {
       const element =
         document.querySelectorAll('.field-row')[index].children[innerIndex];
 
-      element.innerText = value;
-
+      if (value !== 0) {
+        element.innerText = value;
+      } else {
+        element.innerText = '';
+      }
       element.className = '';
       element.classList.add('field-cell', `field-cell--${value}`);
     });

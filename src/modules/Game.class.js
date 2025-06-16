@@ -38,8 +38,10 @@ class Game {
     this.score = 0;
     this.status = 'idle';
     this.button = document.querySelector('.button.start');
-    this.info = document.querySelector('.info');
+    this.gameScore = document.querySelector('.game-score');
     this.messageStart = document.querySelector('.message-start');
+    this.messageLose = document.querySelector('.message-lose');
+    this.messageWin = document.querySelector('.message-win');
 
     this.initialState = copyState(initialState);
     this.initialStateDefault = copyState(initialState);
@@ -48,9 +50,12 @@ class Game {
   checkVictory() {
     const isVictory = !!this.initialState.flat().find((item) => item === 2048);
 
-    if (isVictory) {
+    if (isVictory && this.messageWin && this.button) {
       this.status = 'win';
-      this.hiddenElement('.message-win');
+      this.messageWin.classList.remove('hidden');
+      this.button.classList.remove('start');
+      this.button.classList.add('restart');
+      this.button.innerHTML = 'Restart';
     }
   }
 
@@ -85,8 +90,11 @@ class Game {
     }
 
     this.status = 'lose';
+
     // eslint-disable-next-line max-len
-    this.hiddenElement('.message-lose');
+    if (this.messageLose) {
+      this.messageLose.classList.remove('hidden');
+    }
   }
 
   moveLeft() {
@@ -291,6 +299,8 @@ class Game {
 
   changeTextButton() {
     if (this.button) {
+      this.button.classList.remove('start');
+      this.button.classList.add('restart');
       this.button.innerHTML = 'Restart';
     }
   }
@@ -337,40 +347,42 @@ class Game {
     this.transposeState();
     this.transposeState();
     this.status = 'playing';
-    this.hiddenElement('.message-start');
-  }
 
-  /**
-   * @param {string} selector
-   * @returns {void}
-   * */
-  hiddenElement(selector) {
-    const elem = document.querySelector(selector);
-
-    if (!elem) {
-      return;
+    if (this.messageStart) {
+      this.messageStart.classList.add('hidden');
     }
-    elem.classList.add('hidden');
   }
 
   /**
    * Resets the game.
    */
   restart() {
-    this.initialState = this.initialStateDefault;
+    this.initialState = [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ];
     this.status = 'idle';
     this.score = 0;
 
     if (this.button) {
+      this.button.classList.remove('restart');
+      this.button.classList.add('start');
       this.button.innerHTML = 'Start';
+      this.messageWin.classList.add('hidden');
     }
 
-    if (this.info) {
-      this.info.innerHTML = `Score: ${this.score}`;
+    if (this.gameScore) {
+      this.gameScore.innerHTML = '0';
     }
 
     if (this.messageStart) {
       this.messageStart.classList.remove('hidden');
+    }
+
+    if (this.messageLose) {
+      this.messageLose.classList.add('hidden');
     }
   }
 
