@@ -16,6 +16,7 @@ startButton.addEventListener('click', () => {
     rerenderGrid();
   } else {
     game.start();
+    rerenderGrid();
   }
 });
 
